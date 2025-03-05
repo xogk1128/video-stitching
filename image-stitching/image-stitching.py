@@ -5,7 +5,7 @@ import glob
 import os
 
 # 이미지 폴더 및 파일 설정
-IMG_NAME = 'boat'  # 사용할 이미지 폴더명
+IMG_NAME = 'soccer'  # 사용할 이미지 폴더명
 IMG_DIR = os.path.join('imgs', IMG_NAME)
 RESULT_PATH = os.path.join(IMG_DIR, 'result.jpg')
 RESULT_CROP_PATH = os.path.join(IMG_DIR, 'result_crop.jpg')
