@@ -2,6 +2,10 @@
 .vscode/
 *.code-workspace
 
+# Python 가상환경 무시
+venv/
+.venv/
+
 # 모든 이미지 파일 무시
 *.jpg
 *.jpeg

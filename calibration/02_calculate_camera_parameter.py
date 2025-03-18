@@ -17,7 +17,7 @@ chessboardSize = (8, 6)
 size_of_chessboard_squares_mm = 30
 
 # 캘리브레이션에 사용할 이미지 경로 설정 (png, jpg 등 확장자에 맞게 변경 가능)
-image_path_pattern = '../images/*.png'
+image_path_pattern = 'images/*.png'
 
 # 사용 중인 이미지(프레임) 해상도 (예: 1920 x 1080)
 frameSize = (1920, 1080)
@@ -50,6 +50,7 @@ if not image_files:
 # OpenCV 코너 서브픽셀 보정 파라미터
 criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
+valid_image_count = 0
 for fname in image_files:
     # 이미지 읽기
     img = cv.imread(fname)
@@ -64,6 +65,7 @@ for fname in image_files:
     ret, corners = cv.findChessboardCorners(gray, chessboardSize, None)
 
     if ret:
+        valid_image_count += 1
         # 코너 감지 성공 시, 서브픽셀 정확도로 코너 좌표 보정
         corners_refined = cv.cornerSubPix(gray, corners, (11, 11), (-1, -1), criteria)
         
@@ -101,13 +103,14 @@ if not ret:
     exit()
 
 print("카메라 캘리브레이션 성공!")
+print(f'total image : {len(image_files)}') # 전체 이미지 수 
+print(f'valid_image : {valid_image_count}') # 유효한 이미지 수
 print("Camera Matrix:\n", cameraMatrix)
 print("Distortion Coeffs:\n", distCoeffs)
 
 # -----------------------------
 # 6. 결과 저장
 # -----------------------------
-# pickle로 행렬과 왜곡 계수를 파일에 저장
 save_dir = "calibration_result"
 os.makedirs(save_dir, exist_ok=True)
 
