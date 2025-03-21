@@ -7,29 +7,40 @@ import pickle
 # ================================
 # 1. 파일 경로 및 출력 파일 설정
 # ================================
-video1_name = 'left'
-video2_name = 'rigth'
+video1_name = 'videos/test_left'
+video2_name = 'videos/test_rigth'
 extension = '.mp4'
-video1_path = video1_name + extension # 왼쪽 카메라 영상
+video1_path = video1_name + extension  # 왼쪽 카메라 영상
 video2_path = video2_name + extension  # 오른쪽 카메라 영상
 
+# 출력 디렉토리 지정 및 생성
+output_dir = "output_videos"
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+
 # 1) 일반 스티칭 결과 파일
-stitched_video_path = f"{video1_name}_{video2_name}_stitched.mp4"
+stitched_video_path = os.path.join(
+    output_dir, f"{os.path.basename(video1_name)}_{os.path.basename(video2_name)}_stitched.mp4"
+)
 # 2) 색상 오버레이 스티칭 결과 파일
-overlay_video_path = f"{video1_name}_{video2_name}_stitched_overlay.mp4"
+overlay_video_path = os.path.join(
+    output_dir, f"{os.path.basename(video1_name)}_{os.path.basename(video2_name)}_stitched_overlay.mp4"
+)
 # 3) 크롭된 오버레이 결과 파일
-cropped_overlay_video_path = f"{video1_name}_{video2_name}_stiched_cropped.mp4"
+cropped_overlay_video_path = os.path.join(
+    output_dir, f"{os.path.basename(video1_name)}_{os.path.basename(video2_name)}_stiched_cropped.mp4"
+)
 
 # 카메라 파라미터 (pickle) 파일
-left_calib_file = "calibration.pkl"   # 왼쪽 카메라
-right_calib_file = "calibration.pkl"  # 오른쪽 카메라
+left_calib_file = "calibration.pkl"         # 왼쪽 카메라
+right_calib_file = "calibration_104.pkl"      # 오른쪽 카메라
 
 # ================================
 # 2. 옵션 설정 (True/False)
 # ================================
 want_normal_stitched = True     # 일반 스티칭 영상 생성 여부
 want_overlay_stitched = False    # 색상 오버레이 영상 생성 여부
-want_crop_overlay = True        # 색상 오버레이 영상에 대해 크롭 수행 여부
+want_crop_overlay = True         # 색상 오버레이 영상에 대해 크롭 수행 여부
 
 # ================================
 # 3. 비디오 캡처 및 기본 정보
@@ -134,12 +145,18 @@ fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 # (1) 일반 스티칭 VideoWriter
 if want_normal_stitched:
     out_stitched = cv2.VideoWriter(stitched_video_path, fourcc, fps, (out_w, out_h))
+    if not out_stitched.isOpened():
+        print("Error: VideoWriter for normal stitched video could not be opened.")
+        sys.exit(1)
 else:
     out_stitched = None
 
 # (2) 색상 오버레이 스티칭 VideoWriter
 if want_overlay_stitched:
     out_overlay = cv2.VideoWriter(overlay_video_path, fourcc, fps, (out_w, out_h))
+    if not out_overlay.isOpened():
+        print("Error: VideoWriter for overlay stitched video could not be opened.")
+        sys.exit(1)
 else:
     out_overlay = None
 
@@ -220,9 +237,8 @@ while True:
     if want_normal_stitched and out_stitched is not None:
         out_stitched.write(stitched_frame)
     
-    # (6) 색상 오버레이 영상
+    # (6) 색상 오버레이 영상 저장 (옵션)
     if want_overlay_stitched and out_overlay is not None:
-        # 복사본을 만들어서 오버레이 적용
         overlay_frame = stitched_frame.copy()
         overlay_frame = apply_color_overlay(overlay_frame, frame_width, overlap_width)
         out_overlay.write(overlay_frame)
