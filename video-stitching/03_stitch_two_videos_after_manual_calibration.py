@@ -1,11 +1,13 @@
 import cv2
 import numpy as np
 
+# 수동 파라미터를 바탕으로 교정후 스티칭
+
 path = 'videos/'
 video1_path = path + 'test_left.mp4'
-video2_path = path + 'test_rigth.mp4'
-output_video_path = 'stitched_video_robust3.mp4'
-cropped_output_video_path = 'stitched_video_cropped3.mp4'
+video2_path = path + 'test_right.mp4'
+output_video_path = 'stitched_video_after_manual_callibration.mp4'
+cropped_output_video_path = 'stitched_video_manual_calibration_cropped.mp4'
 
 cap1 = cv2.VideoCapture(video1_path)
 cap2 = cv2.VideoCapture(video2_path)
