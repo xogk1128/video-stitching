@@ -5,9 +5,12 @@ import os
 
 # 특이점 검출 확인
 
+# 영상 폴더
+video_path = "videos/"
+
 # 영상 경로
-left_video_path = "1.mp4"
-right_video_path = "2.mp4"
+left_video_path = video_path + "1.mp4"
+right_video_path = video_path + "2.mp4"
 
 # 카메라 파라미터 파일 경로
 left_calib_file = "calibration_1.pkl"

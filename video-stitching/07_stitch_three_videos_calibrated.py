@@ -7,17 +7,17 @@ import pickle
 # 경로 및 파일명 설정
 # -------------------------------
 path = 'videos/'
-video_left = path + 'left_0314.mp4'
-video_center = path + 'center_0314.mp4'
-video_right = path + 'right_0314.mp4'
+video_left = path + 'output_left.mp4'
+video_center = path + 'output_center.mp4'
+video_right = path + 'output_right.mp4'
 output_video_name = 'panorama_output_test.mp4'
 
 # -------------------------------
 # 각 동영상별 캘리브레이션 결과 로드
 # -------------------------------
-calib_file_left = 'calibration_left.pkl'
-calib_file_center = 'calibration_left.pkl'
-calib_file_right = 'calibration_right.pkl'
+calib_file_left = 'calibration.pkl'
+calib_file_center = 'calibration.pkl'
+calib_file_right = 'calibration.pkl'
 
 with open(calib_file_left, 'rb') as f:
     cameraMatrix_left, distCoeffs_left = pickle.load(f)
